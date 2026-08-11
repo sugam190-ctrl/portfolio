@@ -18,7 +18,23 @@ DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./portfolio.db")
 # access by default, and FastAPI is async/multi-threaded).
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 
-engine = create_engine(DATABASE_URL, connect_args=connect_args)
+engine = create_engine(
+    DATABASE_URL,
+    connect_args=connect_args,
+    # Cloud Postgres providers on free/serverless tiers (Neon, Supabase,
+    # etc.) close idle connections behind the scenes. Without these
+    # settings, SQLAlchemy can hand out a connection from its pool that
+    # looks fine but was actually already dropped, causing
+    # "SSL connection has been closed unexpectedly" errors on requests
+    # that happen to reuse it.
+    #
+    # pool_pre_ping: tests each connection with a cheap "is this alive?"
+    # check before using it, and transparently reconnects if not.
+    # pool_recycle: proactively discards and replaces any connection
+    # older than 5 minutes, before the provider has a chance to.
+    pool_pre_ping=True,
+    pool_recycle=300,
+)
 
 # SessionLocal is a factory that creates new DB sessions (like opening
 # a "conversation" with the database for a single request).
