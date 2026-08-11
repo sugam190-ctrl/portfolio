@@ -1,0 +1,67 @@
+{% extends "admin/_admin_base.html" %}
+
+{% block title %}Photos — Admin{% endblock %}
+
+{% block admin_content %}
+
+<section class="ledger">
+    <div class="ledger-heading">
+        <h2>Profile photos</h2>
+    </div>
+    <p class="admin-hint">
+        These fill the "me" photo spots on the homepage (hero + contact
+        section). Upload as many as you like — one is picked at random
+        each time the page loads.
+    </p>
+
+    <form method="post" action="/admin/images/upload" enctype="multipart/form-data" class="upload-form">
+        <input type="hidden" name="slot" value="profile">
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit">Upload photo</button>
+    </form>
+
+    <div class="image-grid">
+        {% for img in profile_images %}
+        <div class="image-card">
+            <img src="{{ img.file_path }}" alt="Profile photo">
+            <form method="post" action="/admin/images/{{ img.id }}/delete"
+                  onsubmit="return confirm('Delete this photo?');">
+                <button type="submit" class="admin-link-btn">Delete</button>
+            </form>
+        </div>
+        {% else %}
+        <p class="admin-empty">No profile photos uploaded yet — the homepage shows a placeholder.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="ledger">
+    <div class="ledger-heading">
+        <h2>Work / project photos</h2>
+    </div>
+    <p class="admin-hint">
+        These fill the project-screenshot spot in the "My Work" section.
+    </p>
+
+    <form method="post" action="/admin/images/upload" enctype="multipart/form-data" class="upload-form">
+        <input type="hidden" name="slot" value="work">
+        <input type="file" name="file" accept="image/*" required>
+        <button type="submit">Upload photo</button>
+    </form>
+
+    <div class="image-grid">
+        {% for img in work_images %}
+        <div class="image-card">
+            <img src="{{ img.file_path }}" alt="Work photo">
+            <form method="post" action="/admin/images/{{ img.id }}/delete"
+                  onsubmit="return confirm('Delete this photo?');">
+                <button type="submit" class="admin-link-btn">Delete</button>
+            </form>
+        </div>
+        {% else %}
+        <p class="admin-empty">No work photos uploaded yet — the homepage shows a placeholder.</p>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ request.state.settings.hero_first_name }} {{ request.state.settings.hero_last_name }}{% endblock %}</title>
+    <meta name="description" content="{{ request.state.settings.hero_first_name }} {{ request.state.settings.hero_last_name }} — Developer, Builder. A personal portfolio of projects, skills and experiments.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="{{ request.state.font_preset.google_fonts_url }}" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        /* Admin-configurable theme — overrides the defaults in style.css.
+           Every page loads these, since /admin/settings controls them. */
+        html {
+            font-size: {{ request.state.settings.font_scale or '100' }}%;
+        }
+        :root {
+            --paper: {{ request.state.settings.bg_color }};
+            --ink: {{ request.state.settings.ink_color }};
+            --accent: {{ request.state.settings.accent_color }};
+            --display: {{ request.state.font_preset.display }};
+            --sans: {{ request.state.font_preset.sans }};
+            --mono: {{ request.state.font_preset.mono }};
+            --serif: {{ request.state.font_preset.serif }};
+        }
+    </style>
+</head>
+<body>
+    <div class="cursor-glow"></div>
+
+    <header class="site-header" id="site-header">
+        <a href="/#top" class="logo" aria-label="Home">
+            <span>{{ request.state.settings.hero_first_name[0] }}{{ request.state.settings.hero_last_name[0] }}</span>
+        </a>
+
+        <nav class="nav" id="nav">
+            <a href="/#about">About</a>
+            <a href="/#skills">Skills</a>
+            <a href="/#work">Work</a>
+            <a href="/#journey">Journey</a>
+            <a href="/#contact">Contact</a>
+        </nav>
+
+        <button class="menu-btn" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span>
+        </button>
+    </header>
+
+    <main id="top">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div>
+            <strong>{{ request.state.settings.hero_first_name|upper }}<span>.</span></strong>
+            <small>Developer · Builder</small>
+        </div>
+        <div class="footer-note">{{ request.state.settings.contact_location }}</div>
+        <a href="/#top" class="back-top">BACK TO TOP ↑</a>
+    </footer>
+
+    <div class="toast" id="toast" role="status"></div>
+
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+# Secrets — never commit real credentials
+.env
+
+# Local database — never commit your dev data, production uses Neon/Postgres
+portfolio.db
+*.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.Python
+*.egg-info/
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# Uploaded images — these live on the server's disk, not in git.
+# Keep the folder itself (via .gitkeep) but ignore what's uploaded into it.
+app/static/images/uploads/*
+!app/static/images/uploads/.gitkeep
+
+# Editor/OS junk
+.DS_Store
+.vscode/
+.idea/
+*.swp

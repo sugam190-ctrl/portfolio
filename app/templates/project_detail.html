@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }} — {{ request.state.settings.hero_first_name }} {{ request.state.settings.hero_last_name }}{% endblock %}
+
+{% block content %}
+<div class="content-offset">
+    <a href="/#work" class="text-link">← Back to work</a>
+
+    <p class="eyebrow" style="margin-top: 40px;">
+        PROJECT {% if project.featured %}· LIVE{% endif %}
+    </p>
+
+    <h1 style="font: 600 clamp(36px, 6vw, 72px)/1.02 var(--display); letter-spacing: -.04em; text-transform: none; margin: 14px 0 24px;">
+        {{ project.title }}
+    </h1>
+
+    {% if project.image_path %}
+    <div style="border-radius: 16px; overflow: hidden; margin-bottom: 28px; aspect-ratio: 16/9; background: var(--white); border: 1px solid var(--line);">
+        <img src="{{ project.image_path }}" alt="{{ project.title }}" style="width:100%; height:100%; object-fit:cover; display:block;">
+    </div>
+    {% endif %}
+
+    {% if project.tech_stack %}
+    <div class="tags" style="padding-top: 0; margin-bottom: 28px;">
+        {% for tech in project.tech_stack.split(',') %}
+        <span>{{ tech.strip() }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <p style="max-width: 640px; font-size: 16px; line-height: 1.75; color: var(--muted); margin-bottom: 32px;">
+        {{ project.full_description or project.short_description }}
+    </p>
+
+    <div class="hero-actions">
+        {% if project.live_url %}<a href="{{ project.live_url }}" target="_blank" rel="noopener" class="btn btn-dark">Live site <span>↗</span></a>{% endif %}
+        {% if project.github_url %}<a href="{{ project.github_url }}" target="_blank" rel="noopener" class="text-link">Source <span>↗</span></a>{% endif %}
+    </div>
+</div>
+{% endblock %}

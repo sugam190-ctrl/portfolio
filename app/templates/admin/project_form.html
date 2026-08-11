@@ -1,0 +1,87 @@
+{% extends "admin/_admin_base.html" %}
+
+{% block title %}{{ 'Edit project' if project else 'New project' }} — Admin{% endblock %}
+
+{% block admin_content %}
+
+<section class="ledger">
+    <div class="ledger-heading">
+        <h2>{{ 'Edit project' if project else 'New project' }}</h2>
+    </div>
+
+    <form method="post"
+          action="{{ '/admin/projects/' ~ project.id ~ '/edit' if project else '/admin/projects/new' }}"
+          class="contact-form" enctype="multipart/form-data">
+
+        <label>
+            Photo
+            {% if project and project.image_path %}
+            <div class="image-grid" style="margin-bottom: 10px; grid-template-columns: 160px;">
+                <div class="image-card">
+                    <img src="{{ project.image_path }}" alt="{{ project.title }}">
+                </div>
+            </div>
+            <span class="checkbox-label" style="margin-bottom: 8px;">
+                <input type="checkbox" name="remove_photo"> Remove current photo
+            </span>
+            {% endif %}
+            <input type="file" name="photo" accept="image/*">
+        </label>
+
+        <label>
+            Title
+            <input type="text" name="title" required maxlength="200"
+                   value="{{ project.title if project else '' }}">
+        </label>
+
+        <label>
+            Slug (used in the URL — lowercase, hyphens only)
+            <input type="text" name="slug" required maxlength="200"
+                   value="{{ project.slug if project else '' }}">
+        </label>
+
+        <label>
+            Short description (shows in the project list)
+            <textarea name="short_description" required rows="2" maxlength="300">{{ project.short_description if project else '' }}</textarea>
+        </label>
+
+        <label>
+            Full description (shows on the project's own page)
+            <textarea name="full_description" rows="5">{{ project.full_description if project else '' }}</textarea>
+        </label>
+
+        <label>
+            Tech stack (comma-separated, e.g. "FastAPI, PostgreSQL")
+            <input type="text" name="tech_stack" maxlength="300"
+                   value="{{ project.tech_stack if project else '' }}">
+        </label>
+
+        <label>
+            GitHub URL
+            <input type="url" name="github_url" maxlength="300"
+                   value="{{ project.github_url if project else '' }}">
+        </label>
+
+        <label>
+            Live URL
+            <input type="url" name="live_url" maxlength="300"
+                   value="{{ project.live_url if project else '' }}">
+        </label>
+
+        <label>
+            Display order (lower numbers show first)
+            <input type="number" name="display_order"
+                   value="{{ project.display_order if project else 0 }}">
+        </label>
+
+        <label class="checkbox-label">
+            <input type="checkbox" name="featured"
+                   {% if project and project.featured %}checked{% endif %}>
+            Featured — adds the "Verified Build" stamp
+        </label>
+
+        <button type="submit">{{ 'Save changes' if project else 'Create project' }}</button>
+    </form>
+</section>
+
+{% endblock %}

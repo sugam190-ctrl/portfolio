@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link href="{{ request.state.font_preset.google_fonts_url }}" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        html {
+            font-size: {{ request.state.settings.font_scale or '100' }}%;
+        }
+        :root {
+            --paper: {{ request.state.settings.bg_color }};
+            --ink: {{ request.state.settings.ink_color }};
+            --accent: {{ request.state.settings.accent_color }};
+            --display: {{ request.state.font_preset.display }};
+            --sans: {{ request.state.font_preset.sans }};
+            --mono: {{ request.state.font_preset.mono }};
+            --serif: {{ request.state.font_preset.serif }};
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrap">
+        <div class="login-card">
+            <p class="login-eyebrow">RESTRICTED — ADMIN ONLY</p>
+            <h1 class="login-title">Sign in</h1>
+
+            {% if error %}
+            <p class="login-error">Wrong username or password. Try again.</p>
+            {% endif %}
+
+            <form method="post" action="/admin/login" class="contact-form">
+                <label>
+                    Username
+                    <input type="text" name="username" required autofocus>
+                </label>
+                <label>
+                    Password
+                    <input type="password" name="password" required>
+                </label>
+                <button type="submit">Log in</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

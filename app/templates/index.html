@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+
+{% block title %}{{ settings.hero_first_name }} {{ settings.hero_last_name }} — Developer · Builder{% endblock %}
+
+{% block content %}
+
+<section class="hero section">
+    <div class="hero-top">
+        <p class="eyebrow reveal">{{ settings.hero_eyebrow }}</p>
+        <span class="availability reveal {% if not settings.available_for_work %}off{% endif %}">● {{ settings.availability_label }}</span>
+    </div>
+
+    <div class="hero-grid">
+        <div class="hero-copy">
+            <p class="kicker reveal">HELLO, I'M</p>
+            <h1 class="reveal">
+                <span>{{ settings.hero_first_name|upper }}</span>
+                <em>{{ settings.hero_last_name }}.</em>
+            </h1>
+
+            <p class="hero-description reveal">{{ settings.hero_description }}</p>
+
+            <div class="hero-actions reveal">
+                <a href="#work" class="btn btn-dark">Explore my work <span>↘</span></a>
+                <a href="#contact" class="text-link">Let's talk <span>↗</span></a>
+            </div>
+        </div>
+
+        <div class="hero-art reveal">
+            <div class="photo-card">
+                <div class="photo-placeholder">
+                    {% if hero_photo %}
+                    <img src="{{ hero_photo }}" alt="{{ settings.hero_first_name }}">
+                    {% else %}
+                    <span class="photo-initials">{{ settings.hero_first_name[0] }}{{ settings.hero_last_name[0] }}</span>
+                    <small>YOUR PHOTO</small>
+                    {% endif %}
+                </div>
+                <div class="stamp">{{ settings.photo_stamp_text }}</div>
+                <span class="card-number">{{ '%02d'|format(projects|length) }} PROJECTS</span>
+            </div>
+            {% if settings.hero_scribble %}
+            <div class="scribble">{{ settings.hero_scribble|replace(' ', '<br>', 2)|safe }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if settings.hero_badges %}
+    <div class="hero-bottom reveal">
+        {% for badge in settings.hero_badges.split(',') %}
+        <span>{{ badge.strip() }}</span>
+        {% endfor %}
+    </div>
+    {% endif %}
+</section>
+
+{% if settings.marquee_skills %}
+<section class="marquee" aria-label="Skills">
+    <div class="marquee-track">
+        {% for item in settings.marquee_skills.split(',') %}
+        <span>{{ item.strip() }}</span><i>✦</i>
+        {% endfor %}
+        {% for item in settings.marquee_skills.split(',') %}
+        <span>{{ item.strip() }}</span><i>✦</i>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+<section class="section about" id="about">
+    <div class="section-label">
+        <span>(01)</span>
+        <span>ABOUT ME</span>
+    </div>
+
+    <div class="about-grid">
+        <div>
+            <p class="big-statement reveal">{{ settings.about_statement }}</p>
+        </div>
+
+        <div class="about-text reveal">
+            {% for para in settings.about_paragraph.split('\n\n') %}
+            <p>{{ para }}</p>
+            {% endfor %}
+
+            <div class="fact-list">
+                <div><span>01</span><strong>Based in</strong><b>{{ settings.contact_location }}</b></div>
+                <div><span>02</span><strong>Focus</strong><b>{{ settings.about_focus }}</b></div>
+                <div><span>03</span><strong>Currently</strong><b>{{ settings.about_status }}</b></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section skills" id="skills">
+    <div class="section-label">
+        <span>(02)</span>
+        <span>TOOLKIT</span>
+    </div>
+
+    {% set upright, italic = settings.skills_heading|split_heading %}
+    <div class="skills-heading">
+        <h2>{{ upright }}{% if italic %}<br><i>{{ italic }}</i>{% endif %}</h2>
+        <p>{{ settings.skills_intro }}</p>
+    </div>
+
+    <div class="skills-grid">
+        {% for service in services %}
+        <article class="skill-card reveal">
+            <span class="skill-no">{{ '%02d'|format(loop.index) }}</span>
+            <h3>{{ service.title }}</h3>
+            <p>{{ service.description }}</p>
+            {% if service.tags %}
+            <div class="tags">
+                {% for tag in service.tags.split(',') %}
+                <span>{{ tag.strip() }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section work" id="work">
+    <div class="section-label">
+        <span>(03)</span>
+        <span>SELECTED WORK</span>
+    </div>
+
+    {% set upright, italic = settings.work_heading|split_heading %}
+    <div class="work-intro">
+        <h2>{{ upright }}{% if italic %}<br><i>{{ italic }}</i>{% endif %}</h2>
+        <p>{{ settings.work_intro }}</p>
+    </div>
+
+    <div class="project-list">
+        {% set variants = ['project-dark', 'project-paper', 'project-blue'] %}
+        {% for project in projects %}
+        <article class="project {{ variants[loop.index0 % 3] }} reveal">
+            <div class="project-top">
+                <span>{{ '%02d'|format(loop.index) }} / PROJECT</span>
+                <span>{{ project.created_at.strftime('%Y') if project.created_at else '' }}</span>
+            </div>
+            <div class="project-content">
+                <div>
+                    <h3>{{ project.title }}</h3>
+                    <p>{{ project.short_description }}</p>
+                    {% if project.tech_stack %}
+                    <div class="project-tags">
+                        {% for tech in project.tech_stack.split(',') %}
+                        <span>{{ tech.strip() }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="project-visual">
+                    {% if project.image_path %}
+                    <img src="{{ project.image_path }}" alt="{{ project.title }}" style="width:100%; height:100%; object-fit:cover; border-radius: 24px;">
+                    {% else %}
+                    <span class="project-visual-number">{{ '%02d'|format(loop.index) }}</span>
+                    <span class="visual-label">{{ 'LIVE' if project.featured else 'BUILT' }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% if project.live_url %}
+            <a href="{{ project.live_url }}" target="_blank" rel="noopener" class="project-link">View project ↗</a>
+            {% else %}
+            <a href="/projects/{{ project.slug }}" class="project-link">View project ↗</a>
+            {% endif %}
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section journey" id="journey">
+    <div class="section-label">
+        <span>(04)</span>
+        <span>JOURNEY</span>
+    </div>
+
+    {% set upright, italic = settings.journey_heading|split_heading %}
+    <div class="journey-grid">
+        <div>
+            <h2>{{ upright }}{% if italic %}<br><i>{{ italic }}</i>{% endif %}</h2>
+            <p class="journey-note">{{ settings.journey_note }}</p>
+        </div>
+
+        <div class="timeline">
+            {% for item in timeline_items %}
+            <div class="timeline-item reveal">
+                <span>{{ item.label }}</span>
+                <div>
+                    <h3>{{ item.title }}</h3>
+                    <p>{{ item.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section ai-section">
+    {% set upright, italic = settings.ai_heading|split_heading %}
+    <div class="ai-card reveal">
+        <div class="ai-orbit"><span>✦</span></div>
+        <div>
+            <p class="eyebrow">TRANSPARENCY NOTE</p>
+            <h2>{{ upright }}{% if italic %}<br><i>{{ italic }}</i>{% endif %}</h2>
+            <p>{{ settings.ai_note }}</p>
+        </div>
+        <div class="ai-signature">{{ settings.hero_first_name|upper }}<br><span>×</span></div>
+    </div>
+</section>
+
+<section class="section contact" id="contact">
+    <div class="section-label">
+        <span>(05)</span>
+        <span>CONTACT</span>
+    </div>
+
+    {% set upright, italic = settings.contact_heading|split_heading %}
+    <div class="contact-content">
+        <p class="eyebrow">{{ settings.contact_eyebrow }}</p>
+        <h2>{{ upright }}{% if italic %}<br><i>{{ italic }}</i>{% endif %}</h2>
+        <a class="email-link" href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }} <span>↗</span></a>
+
+        {% if settings.contact_phone or settings.contact_location %}
+        <p class="contact-extra">
+            {% if settings.contact_phone %}{{ settings.contact_phone }} — {% endif %}{{ settings.contact_location }}
+        </p>
+        {% endif %}
+
+        {% if settings.social_github or settings.social_linkedin or settings.social_instagram or settings.social_x %}
+        <div class="socials">
+            {% if settings.social_github %}<a href="{{ settings.social_github }}" target="_blank" rel="noopener">GitHub ↗</a>{% endif %}
+            {% if settings.social_linkedin %}<a href="{{ settings.social_linkedin }}" target="_blank" rel="noopener">LinkedIn ↗</a>{% endif %}
+            {% if settings.social_instagram %}<a href="{{ settings.social_instagram }}" target="_blank" rel="noopener">Instagram ↗</a>{% endif %}
+            {% if settings.social_x %}<a href="{{ settings.social_x }}" target="_blank" rel="noopener">X ↗</a>{% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

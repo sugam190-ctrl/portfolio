@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content-offset">
+<div class="admin-bar">
+    <span class="admin-bar-label">ADMIN — logged in as {{ admin or 'you' }}</span>
+    <nav class="admin-bar-nav">
+        <a href="/admin">Projects</a>
+        <a href="/admin/services">Toolkit</a>
+        <a href="/admin/timeline">Journey</a>
+        <a href="/admin/images">Photos</a>
+        <a href="/admin/settings">Content &amp; Theme</a>
+        <a href="/admin/messages">Messages</a>
+        <a href="/admin/logout">Log out</a>
+        <a href="/" target="_blank">View site →</a>
+    </nav>
+</div>
+{% block admin_content %}{% endblock %}
+</div>
+{% endblock %}
