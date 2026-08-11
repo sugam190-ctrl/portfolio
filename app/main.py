@@ -1,14 +1,14 @@
 """
 Entrypoint. Running `uvicorn app.main:app --reload` starts this.
 
-For now this file just:
-1. Creates the DB tables if they don't exist (normally Alembic handles this,
-   but at the very start it's useful to see it happen automatically)
-2. Exposes a couple of test routes so we can confirm FastAPI <-> DB works
-
-We'll replace the "create_all" approach with proper Alembic migrations
-in the next step — create_all is fine for a first sanity check, but it
-doesn't track schema *changes* over time the way migrations do.
+Table creation is handled entirely by Alembic migrations
+(`alembic upgrade head`) — not by this file. Earlier versions of this
+file also called `models.Base.metadata.create_all()` here as a
+"safety net," but that caused repeated conflicts with Alembic: it
+would silently create tables from whatever `models.py` looked like at
+that moment, and Alembic had no way of knowing that had happened,
+leading to "table already exists" errors the next time a migration
+ran. Alembic alone is now the single source of truth for the schema.
 """
 
 from fastapi import FastAPI, Depends, Request
@@ -19,10 +19,6 @@ from app import models
 from app.database import engine, get_db, SessionLocal
 from app.routers import public, admin
 from app.theme import FONT_PRESETS, get_or_create_settings
-
-# Creates all tables defined in models.py, if they don't already exist.
-# (Alembic is the real source of truth now — this is just a safety net.)
-models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Sugam's Portfolio")
 
