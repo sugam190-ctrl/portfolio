@@ -1,5 +1,4 @@
 import os
-import uuid
 
 from fastapi import APIRouter, Depends, Form, Request, HTTPException, File, UploadFile
 from fastapi.responses import RedirectResponse
@@ -10,34 +9,10 @@ from app import models
 from app.database import get_db
 from app.auth import verify_password, create_access_token, get_current_admin
 from app.theme import FONT_PRESETS, ICONS, get_or_create_settings
+from app.storage import save_uploaded_image, delete_uploaded_file
 
 router = APIRouter(prefix="/admin")
 templates = Jinja2Templates(directory="app/templates")
-
-UPLOAD_DIR = "app/static/images/uploads"
-ALLOWED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
-
-
-async def save_uploaded_image(file: UploadFile) -> str:
-    """
-    Validates and saves an uploaded image to disk with a random
-    filename (never trust the original filename — path traversal and
-    collisions both matter). Returns the public URL path to store in
-    the database.
-    """
-    ext = os.path.splitext(file.filename or "")[1].lower()
-    if ext not in ALLOWED_EXTENSIONS:
-        raise HTTPException(status_code=400, detail="Unsupported file type")
-
-    new_filename = f"{uuid.uuid4().hex}{ext}"
-    dest_path = os.path.join(UPLOAD_DIR, new_filename)
-
-    os.makedirs(UPLOAD_DIR, exist_ok=True)
-    contents = await file.read()
-    with open(dest_path, "wb") as f:
-        f.write(contents)
-
-    return f"/static/images/uploads/{new_filename}"
 
 
 # ---------- Login / logout ----------
@@ -179,8 +154,11 @@ async def update_project(
     project.display_order = display_order
 
     if photo and photo.filename:
+        if project.image_path:
+            delete_uploaded_file(project.image_path)
         project.image_path = await save_uploaded_image(photo)
-    elif remove_photo:
+    elif remove_photo and project.image_path:
+        delete_uploaded_file(project.image_path)
         project.image_path = None
 
     db.commit()
@@ -481,9 +459,7 @@ def delete_image(
 ):
     image = db.get(models.SiteImage, image_id)
     if image:
-        file_on_disk = image.file_path.lstrip("/")
-        if os.path.exists(file_on_disk):
-            os.remove(file_on_disk)
+        delete_uploaded_file(image.file_path)
         db.delete(image)
         db.commit()
     return RedirectResponse(url="/admin/images", status_code=303)

@@ -2,13 +2,14 @@ from datetime import datetime
 import random
 
 from fastapi import APIRouter, Depends, Form, Request, HTTPException
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, Response
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
 from app import models
 from app.database import get_db
 from app.theme import get_or_create_settings, split_heading
+from app.storage import get_b2_object
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -18,6 +19,27 @@ templates.env.filters["split_heading"] = split_heading
 def pick_random_image(db: Session, slot: str):
     images = db.query(models.SiteImage).filter_by(slot=slot).all()
     return random.choice(images).file_path if images else None
+
+
+@router.get("/media/{filename}")
+def serve_media(filename: str):
+    """
+    Serves images stored in Backblaze B2. The bucket itself is
+    private (avoids B2's card-required step for public buckets) —
+    this route fetches the object server-side using the app's own
+    credentials and streams it back, so visitors never talk to B2
+    directly. Cached hard since uploaded filenames are random and
+    never reused.
+    """
+    try:
+        contents, content_type = get_b2_object(filename)
+    except Exception:
+        raise HTTPException(status_code=404, detail="Image not found")
+    return Response(
+        content=contents,
+        media_type=content_type,
+        headers={"Cache-Control": "public, max-age=31536000, immutable"},
+    )
 
 
 @router.get("/")
