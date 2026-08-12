@@ -1,0 +1,28 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Admin — Toolkit{% endblock %}
+{% block admin_content %}
+<section class="ledger">
+    <div class="ledger-heading">
+        <h2>Toolkit cards</h2>
+        <a href="/admin/services/new" class="admin-btn">+ New card</a>
+    </div>
+    {% for service in services %}
+    <div class="ledger-row">
+        <div class="ledger-row-main">
+            <span class="ledger-row-title">{{ service.title }}</span>
+            <span class="ledger-row-desc">{{ service.description }}</span>
+        </div>
+        <span class="ledger-row-stack">{{ service.tags }}</span>
+        <div class="admin-row-actions">
+            <a href="/admin/services/{{ service.id }}/edit">Edit</a>
+            <form method="post" action="/admin/services/{{ service.id }}/delete"
+                  onsubmit="return confirm('Delete {{ service.title }}?');">
+                <button type="submit" class="admin-link-btn">Delete</button>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <p class="admin-empty">No toolkit cards yet.</p>
+    {% endfor %}
+</section>
+{% endblock %}

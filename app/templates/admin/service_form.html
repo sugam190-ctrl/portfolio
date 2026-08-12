@@ -1,0 +1,28 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}{{ 'Edit' if service else 'New' }} toolkit card — Admin{% endblock %}
+{% block admin_content %}
+<section class="ledger">
+    <div class="ledger-heading"><h2>{{ 'Edit toolkit card' if service else 'New toolkit card' }}</h2></div>
+    <form method="post"
+          action="{{ '/admin/services/' ~ service.id ~ '/edit' if service else '/admin/services/new' }}"
+          class="contact-form">
+        <label>
+            Title
+            <input type="text" name="title" required maxlength="150" value="{{ service.title if service else '' }}">
+        </label>
+        <label>
+            Description
+            <textarea name="description" required rows="2" maxlength="300">{{ service.description if service else '' }}</textarea>
+        </label>
+        <label>
+            Tags (comma-separated, e.g. "HTML, CSS, JS")
+            <input type="text" name="tags" maxlength="200" value="{{ service.tags if service else '' }}">
+        </label>
+        <label>
+            Display order
+            <input type="number" name="display_order" value="{{ service.display_order if service else 0 }}">
+        </label>
+        <button type="submit">{{ 'Save changes' if service else 'Create card' }}</button>
+    </form>
+</section>
+{% endblock %}

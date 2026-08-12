@@ -1,0 +1,28 @@
+{% extends "admin/_admin_base.html" %}
+
+{% block title %}Messages — Admin{% endblock %}
+
+{% block admin_content %}
+
+<section class="ledger">
+    <div class="ledger-heading">
+        <h2>Messages</h2>
+        <span class="ledger-heading-count">{{ messages|length }} total</span>
+    </div>
+
+    {% for m in messages %}
+    <div class="ledger-row">
+        <div class="ledger-row-main">
+            <span class="ledger-row-title">{{ m.name }} — {{ m.email }}</span>
+            <span class="ledger-row-desc">{{ m.message }}</span>
+        </div>
+        <span class="ledger-row-stack">
+            {{ m.created_at.strftime('%Y-%m-%d %H:%M') if m.created_at else '' }}
+        </span>
+    </div>
+    {% else %}
+    <p class="admin-empty">No messages yet.</p>
+    {% endfor %}
+</section>
+
+{% endblock %}

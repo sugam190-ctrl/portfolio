@@ -1,0 +1,28 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}{{ 'Edit' if item else 'New' }} timeline entry — Admin{% endblock %}
+{% block admin_content %}
+<section class="ledger">
+    <div class="ledger-heading"><h2>{{ 'Edit timeline entry' if item else 'New timeline entry' }}</h2></div>
+    <form method="post"
+          action="{{ '/admin/timeline/' ~ item.id ~ '/edit' if item else '/admin/timeline/new' }}"
+          class="contact-form">
+        <label>
+            Label (e.g. "NOW", "01", "02")
+            <input type="text" name="label" required maxlength="20" value="{{ item.label if item else '' }}">
+        </label>
+        <label>
+            Title
+            <input type="text" name="title" required maxlength="150" value="{{ item.title if item else '' }}">
+        </label>
+        <label>
+            Description
+            <textarea name="description" required rows="2" maxlength="400">{{ item.description if item else '' }}</textarea>
+        </label>
+        <label>
+            Display order
+            <input type="number" name="display_order" value="{{ item.display_order if item else 0 }}">
+        </label>
+        <button type="submit">{{ 'Save changes' if item else 'Create entry' }}</button>
+    </form>
+</section>
+{% endblock %}

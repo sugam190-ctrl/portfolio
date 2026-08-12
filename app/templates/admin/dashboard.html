@@ -1,0 +1,41 @@
+{% extends "admin/_admin_base.html" %}
+
+{% block title %}Admin — Projects{% endblock %}
+
+{% block admin_content %}
+
+<section class="ledger">
+    <div class="ledger-heading">
+        <h2>Projects</h2>
+        <a href="/admin/projects/new" class="admin-btn">+ New project</a>
+    </div>
+
+    {% for project in projects %}
+    <div class="ledger-row">
+        <div class="ledger-row-main">
+            <span class="ledger-row-title">
+                {{ project.title }}
+                {% if project.featured %}<span class="admin-featured-badge">LIVE</span>{% endif %}
+            </span>
+            <span class="ledger-row-desc">{{ project.short_description }}</span>
+        </div>
+        <div class="admin-row-actions">
+            <a href="/admin/projects/{{ project.id }}/edit">Edit</a>
+            <form method="post" action="/admin/projects/{{ project.id }}/delete"
+                  onsubmit="return confirm('Delete {{ project.title }}? This cannot be undone.');">
+                <button type="submit" class="admin-link-btn">Delete</button>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <p class="admin-empty">No projects yet. Add your first one.</p>
+    {% endfor %}
+</section>
+
+<section class="ledger">
+    <a href="/admin/messages" class="admin-inbox-link">
+        View messages — {{ unread_count }} unread →
+    </a>
+</section>
+
+{% endblock %}

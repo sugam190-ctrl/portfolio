@@ -1,0 +1,99 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Content & Theme — Admin{% endblock %}
+{% block admin_content %}
+
+{% if request.query_params.get('saved') %}
+<div class="connect-success">Saved. Refresh the homepage in another tab to see it.</div>
+{% endif %}
+
+<p class="admin-hint">
+    This page controls essentially everything on your homepage. Headings
+    with two parts (normal + italic) use a "|" to separate them — e.g.
+    "Things I|work with." shows "Things I" upright and "work with." in
+    italic. Leave out the "|" for a plain heading.
+</p>
+
+<form method="post" action="/admin/settings" class="contact-form">
+
+    <section class="ledger">
+        <div class="ledger-heading"><h2>Hero</h2></div>
+        <label>Eyebrow text (top of page)<input type="text" name="hero_eyebrow" value="{{ settings.hero_eyebrow }}"></label>
+        <label class="checkbox-label"><input type="checkbox" name="available_for_work" {% if settings.available_for_work %}checked{% endif %}> Show as available</label>
+        <label>Availability badge text<input type="text" name="availability_label" value="{{ settings.availability_label }}"></label>
+        <label>First name<input type="text" name="hero_first_name" required value="{{ settings.hero_first_name }}"></label>
+        <label>Last name<input type="text" name="hero_last_name" required value="{{ settings.hero_last_name }}"></label>
+        <label>Hero description<textarea name="hero_description" rows="3">{{ settings.hero_description }}</textarea></label>
+        <label>Badges under hero (comma-separated)<input type="text" name="hero_badges" value="{{ settings.hero_badges }}"></label>
+        <label>Photo stamp text<input type="text" name="photo_stamp_text" value="{{ settings.photo_stamp_text }}"></label>
+        <label>Scribble note near photo<input type="text" name="hero_scribble" value="{{ settings.hero_scribble }}"></label>
+    </section>
+
+    <section class="ledger">
+        <div class="ledger-heading"><h2>Skills marquee</h2></div>
+        <label>Ticker items (comma-separated)<input type="text" name="marquee_skills" value="{{ settings.marquee_skills }}"></label>
+    </section>
+
+    <section class="ledger">
+        <div class="ledger-heading"><h2>About</h2></div>
+        <label>Big statement<textarea name="about_statement" rows="3">{{ settings.about_statement }}</textarea></label>
+        <label>Bio paragraph(s)<textarea name="about_paragraph" rows="5">{{ settings.about_paragraph }}</textarea></label>
+        <label>"Focus" fact value<input type="text" name="about_focus" value="{{ settings.about_focus }}"></label>
+        <label>"Currently" fact value<input type="text" name="about_status" value="{{ settings.about_status }}"></label>
+    </section>
+
+    <section class="ledger">
+        <div class="ledger-heading"><h2>Section intros</h2></div>
+        <label>Toolkit heading<input type="text" name="skills_heading" value="{{ settings.skills_heading }}"></label>
+        <label>Toolkit intro text<input type="text" name="skills_intro" value="{{ settings.skills_intro }}"></label>
+        <label>Work heading<input type="text" name="work_heading" value="{{ settings.work_heading }}"></label>
+        <label>Work intro text<input type="text" name="work_intro" value="{{ settings.work_intro }}"></label>
+        <label>Journey heading<input type="text" name="journey_heading" value="{{ settings.journey_heading }}"></label>
+        <label>Journey note<input type="text" name="journey_note" value="{{ settings.journey_note }}"></label>
+    </section>
+
+    <section class="ledger">
+        <div class="ledger-heading"><h2>AI transparency note</h2></div>
+        <label>Heading<input type="text" name="ai_heading" value="{{ settings.ai_heading }}"></label>
+        <label>Note text<textarea name="ai_note" rows="3">{{ settings.ai_note }}</textarea></label>
+    </section>
+
+    <section class="ledger">
+        <div class="ledger-heading"><h2>Contact</h2></div>
+        <label>Eyebrow text<input type="text" name="contact_eyebrow" value="{{ settings.contact_eyebrow }}"></label>
+        <label>Heading<input type="text" name="contact_heading" value="{{ settings.contact_heading }}"></label>
+        <label>Email<input type="email" name="contact_email" required value="{{ settings.contact_email }}"></label>
+        <label>Phone<input type="text" name="contact_phone" value="{{ settings.contact_phone or '' }}"></label>
+        <label>Location<input type="text" name="contact_location" required value="{{ settings.contact_location }}"></label>
+        <label>GitHub URL (blank to hide)<input type="url" name="social_github" value="{{ settings.social_github or '' }}"></label>
+        <label>LinkedIn URL (blank to hide)<input type="url" name="social_linkedin" value="{{ settings.social_linkedin or '' }}"></label>
+        <label>Instagram URL (blank to hide)<input type="url" name="social_instagram" value="{{ settings.social_instagram or '' }}"></label>
+        <label>X / Twitter URL (blank to hide)<input type="url" name="social_x" value="{{ settings.social_x or '' }}"></label>
+    </section>
+
+    <section class="ledger">
+        <div class="ledger-heading"><h2>Theme</h2></div>
+        <label>Background color<input type="color" name="bg_color" value="{{ settings.bg_color }}"></label>
+        <label>Ink / text color<input type="color" name="ink_color" value="{{ settings.ink_color }}"></label>
+        <label>Accent color<input type="color" name="accent_color" value="{{ settings.accent_color }}"></label>
+        <label>
+            Font pairing
+            <select name="font_pair">
+                {% for key, preset in font_presets.items() %}
+                <option value="{{ key }}" {% if settings.font_pair == key %}selected{% endif %}>{{ preset.label }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            Font size
+            <select name="font_scale">
+                <option value="87.5" {% if settings.font_scale == "87.5" %}selected{% endif %}>Smaller</option>
+                <option value="100" {% if settings.font_scale == "100" or not settings.font_scale %}selected{% endif %}>Normal (default)</option>
+                <option value="112.5" {% if settings.font_scale == "112.5" %}selected{% endif %}>Larger</option>
+                <option value="125" {% if settings.font_scale == "125" %}selected{% endif %}>Largest</option>
+            </select>
+        </label>
+    </section>
+
+    <button type="submit">Save everything</button>
+</form>
+{% endblock %}

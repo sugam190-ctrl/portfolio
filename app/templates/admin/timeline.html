@@ -1,0 +1,27 @@
+{% extends "admin/_admin_base.html" %}
+{% block title %}Admin — Journey{% endblock %}
+{% block admin_content %}
+<section class="ledger">
+    <div class="ledger-heading">
+        <h2>Journey timeline</h2>
+        <a href="/admin/timeline/new" class="admin-btn">+ New entry</a>
+    </div>
+    {% for item in items %}
+    <div class="ledger-row">
+        <div class="ledger-row-main">
+            <span class="ledger-row-title">{{ item.label }} — {{ item.title }}</span>
+            <span class="ledger-row-desc">{{ item.description }}</span>
+        </div>
+        <div class="admin-row-actions">
+            <a href="/admin/timeline/{{ item.id }}/edit">Edit</a>
+            <form method="post" action="/admin/timeline/{{ item.id }}/delete"
+                  onsubmit="return confirm('Delete this entry?');">
+                <button type="submit" class="admin-link-btn">Delete</button>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <p class="admin-empty">No timeline entries yet.</p>
+    {% endfor %}
+</section>
+{% endblock %}
