@@ -113,7 +113,7 @@ button {
 }
 
 .logo::after {
-  content: "✦";
+  content: "❣️";
   position: absolute;
   top: -9px;
   right: -8px;
@@ -404,25 +404,135 @@ h1 em {
 .about-grid {
   display: grid;
   grid-template-columns: 1.2fr .8fr;
-  gap: 10vw;
+  gap: 7vw;
+  align-items: start;
 }
 
-.big-statement {
-  font: 500 clamp(38px, 5.2vw, 78px)/1.02 var(--display);
-  letter-spacing: -.055em;
+.about-left {
+  position: relative;
+  min-height: 650px;
+  padding-right: 30%;
 }
 
-.big-statement span {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
+.about-intro {
+  position: relative;
+  z-index: 2;
+  max-width: 650px;
+}
+
+.about-greeting {
+  font: 500 15px/1.2 var(--serif);
+  margin-bottom: 18px;
+}
+
+.about-name {
+  font: 500 clamp(58px, 6vw, 92px)/.88 var(--display);
+  letter-spacing: -.075em;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.about-role {
+  margin-top: 28px;
+  font: 500 13px/1.4 var(--serif);
+}
+
+.about-role span {
+  margin: 0 5px;
+}
+
+.about-copy {
+  margin-top: 30px;
+  font: 400 14px/1.7 var(--serif);
+  color: var(--ink);
+}
+
+.about-copy p + p {
+  margin-top: 3px;
+}
+
+.about-copy::after {
+  content: "";
+  display: block;
+  width: 46px;
+  height: 1px;
+  background: var(--ink);
+  margin-top: 14px;
+}
+
+.about-details {
+  margin-top: 40px;
+  display: grid;
+  gap: 10px;
+}
+
+.about-detail {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 36px;
+}
+
+.detail-icon {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  border-radius: 6px;
+  background: rgba(23, 23, 23, .07);
+  display: grid;
+  place-items: center;
+  font: 500 17px/1 var(--serif);
+}
+
+.about-detail div {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font: 400 12px/1.4 var(--serif);
+}
+
+.about-detail strong {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.about-detail div > span {
+  color: #4f4e49;
+}
+
+.about-actions {
+  margin-top: 38px;
+}
+
+.about-actions .btn {
+  border-radius: 2px;
+  padding: 15px 19px;
+}
+
+.about-illustration {
+  position: absolute;
+  z-index: 1;
+  width: min(48%, 380px);
+  right: 0;
+  top: 115px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.about-illustration img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .about-text {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.75;
   color: #55534d;
-  padding-top: 10px;
+  padding-top: 0;
 }
 
 .about-text p + p {
@@ -884,6 +994,28 @@ h1 em {
 
 @media (max-width: 900px) {
   .section { padding: 100px 5vw; }
+
+  .about-left {
+    min-height: auto;
+    padding-right: 0;
+  }
+
+  .about-name {
+    white-space: normal;
+    font-size: clamp(52px, 13vw, 82px);
+  }
+
+  .about-illustration {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: min(80%, 420px);
+    margin: 45px auto 0;
+  }
+
+  .about-detail div {
+    flex-wrap: wrap;
+  }
   .nav {
     position: fixed;
     top: 82px;

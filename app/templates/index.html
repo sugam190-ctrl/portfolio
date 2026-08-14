@@ -7,14 +7,14 @@
 <section class="hero section">
     <div class="hero-top">
         <p class="eyebrow reveal">{{ settings.hero_eyebrow }}</p>
-        <span class="availability reveal {% if not settings.available_for_work %}off{% endif %}">● {{ settings.availability_label }}</span>
+        <span class="availability reveal {% if not settings.available_for_work %}off{% endif %}"> {{ settings.availability_label }}</span>
     </div>
 
     <div class="hero-grid">
         <div class="hero-copy">
             <p class="kicker reveal">HELLO, I'M</p>
             <h1 class="reveal">
-                <span>{{ settings.hero_first_name|upper }}</span>
+                <span>{{ settings.hero_first_name|upper }}❣️</span>
                 <em>{{ settings.hero_last_name }}.</em>
             </h1>
 
@@ -39,7 +39,7 @@
                 <div class="stamp">{{ settings.photo_stamp_text }}</div>
                 <span class="card-number">{{ '%02d'|format(projects|length) }} PROJECTS</span>
             </div>
-            {% if settings.hero_scribble %}
+        JAVASCRIPT    {% if settings.hero_scribble %}
             <div class="scribble">{{ settings.hero_scribble|replace(' ', '<br>', 2)|safe }}</div>
             {% endif %}
         </div>
@@ -58,10 +58,10 @@
 <section class="marquee" aria-label="Skills">
     <div class="marquee-track">
         {% for item in settings.marquee_skills.split(',') %}
-        <span>{{ item.strip() }}</span><i>✦</i>
+        <span>{{ item.strip() }}</span><i>❣️</i>
         {% endfor %}
         {% for item in settings.marquee_skills.split(',') %}
-        <span>{{ item.strip() }}</span><i>✦</i>
+        <span>{{ item.strip() }}</span><i>❣️</i>
         {% endfor %}
     </div>
 </section>
@@ -74,8 +74,70 @@
     </div>
 
     <div class="about-grid">
-        <div>
-            <p class="big-statement reveal">{{ settings.about_statement }}</p>
+        <div class="about-left reveal">
+            <div class="about-intro">
+                <p class="about-greeting">Hi, I’m</p>
+
+                <h2 class="about-name">
+                    {{ settings.hero_first_name }}
+                    {{ settings.hero_last_name }}.
+                </h2>
+
+                <p class="about-role">
+                    Developer <span>•</span> Problem Solver <span>•</span> Builder
+                </p>
+
+                <div class="about-copy">
+                    <p>I build digital solutions that solve real problems.</p>
+                    <p>I turn ideas into simple, useful and impactful products.</p>
+                </div>
+
+                <div class="about-details">
+                    <div class="about-detail">
+                        <span class="detail-icon" aria-hidden="true">⌖</span>
+                        <div>
+                            <strong>Based in</strong>
+                            <span>{{ settings.contact_location }}</span>
+                        </div>
+                    </div>
+
+                    <div class="about-detail">
+                        <span class="detail-icon" aria-hidden="true">▣</span>
+                        <div>
+                            <strong>Working with</strong>
+                            <span>Python, FastAPI, Linux, Git &amp; Cloud</span>
+                        </div>
+                    </div>
+
+                    <div class="about-detail">
+                        <span class="detail-icon" aria-hidden="true">◎</span>
+                        <div>
+                            <strong>Focus</strong>
+                            <span>Software Development, Cybersecurity, Business</span>
+                        </div>
+                    </div>
+
+                    <div class="about-detail">
+                        <span class="detail-icon" aria-hidden="true">↗</span>
+                        <div>
+                            <strong>Goal</strong>
+                            <span>Build useful products and a technology business</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-actions">
+                    <a href="#work" class="btn btn-dark">
+                        View my work <span>↗</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="about-illustration" aria-hidden="true">
+                <img src="{{ url_for('static', path='images/about-illustration.png') }}"
+                     alt=""
+                     loading="lazy">
+            </div>
         </div>
 
         <div class="about-text reveal">
@@ -203,7 +265,7 @@
 <section class="section ai-section">
     {% set upright, italic = settings.ai_heading|split_heading %}
     <div class="ai-card reveal">
-        <div class="ai-orbit"><span>✦</span></div>
+        <div class="ai-orbit"><span>❣️</span></div>
         <div>
             <p class="eyebrow">TRANSPARENCY NOTE</p>
             <h2>{{ upright }}{% if italic %}<br><i>{{ italic }}</i>{% endif %}</h2>
