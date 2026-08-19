@@ -14,7 +14,7 @@
         <div class="hero-copy">
             <p class="kicker reveal">HELLO, I'M</p>
             <h1 class="reveal">
-                <span>{{ settings.hero_first_name|upper }}❣️</span>
+                <span>{{ settings.hero_first_name|upper }}🐧</span>
                 <em>{{ settings.hero_last_name }}.</em>
             </h1>
 
@@ -58,10 +58,10 @@
 <section class="marquee" aria-label="Skills">
     <div class="marquee-track">
         {% for item in settings.marquee_skills.split(',') %}
-        <span>{{ item.strip() }}</span><i>❣️</i>
+        <span>{{ item.strip() }}</span><i>🐧</i>
         {% endfor %}
         {% for item in settings.marquee_skills.split(',') %}
-        <span>{{ item.strip() }}</span><i>❣️</i>
+        <span>{{ item.strip() }}</span><i>🐧</i>
         {% endfor %}
     </div>
 </section>
@@ -265,7 +265,7 @@
 <section class="section ai-section">
     {% set upright, italic = settings.ai_heading|split_heading %}
     <div class="ai-card reveal">
-        <div class="ai-orbit"><span>❣️</span></div>
+        <div class="ai-orbit"><span>🐧</span></div>
         <div>
             <p class="eyebrow">TRANSPARENCY NOTE</p>
             <h2>{{ upright }}{% if italic %}<br><i>{{ italic }}</i>{% endif %}</h2>
